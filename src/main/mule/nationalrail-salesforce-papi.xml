@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:my-train-customer-sapi="http://www.mulesoft.org/schema/mule/my-train-customer-sapi" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/my-train-customer-sapi http://www.mulesoft.org/schema/mule/my-train-customer-sapi/current/mule-my-train-customer-sapi.xsd">
+	<vm:config name="VM_ConfigSF" doc:name="VM Config" doc:id="55896aa2-8a3a-4413-a04a-0d3e10ceac39" >
+		<vm:queues >
+			<vm:queue queueName="SALESFORCE" />
+		</vm:queues>
+	</vm:config>
+	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="e77792aa-0525-4b4a-ab22-c6a6c22498ea" applicationName="nationalrail-salesforce-papi" applicationVersion="1.0" environment="dev" />
+	<my-train-customer-sapi:config name="My_Train_Customer_SAPI_Config" doc:name="My-Train-Customer-SAPI Config" doc:id="ec8ac8c0-1cac-4a8a-b813-5d9694dfff9d" property_host="localhost" property_port="8090" property_protocol="HTTP" property_basePath="/api/" property_responseTimeout="1000000" />
+	<flow name="nationalrail-salesforce-papiFlow" doc:id="723fce19-c444-4418-b29b-640a973001e8">
+		<scheduler doc:name="Scheduler" doc:id="93234789-3fcb-4d33-b8ff-43491cfd0715" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="30" timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</scheduler>
+		<vm:publish queueName="SALESFORCE" doc:name="Publish" doc:id="2408e139-a471-47d2-9f64-51b51b44d84f" config-ref="VM_ConfigSF" timeout="50000000"/>
+		<json-logger:logger doc:name="Logger" doc:id="94dc5935-4e28-418d-8d79-185f77e7385d" config-ref="JSON_Logger_Config" message="salesforceEndLogger"/>
+	</flow>
+	<flow name="Copy_of_SALESFORCEFlow" doc:id="c4270108-e27e-4ecc-81be-bdb8d8c0e1c4" >
+		<vm:listener doc:name="Listener" doc:id="ca4e0291-6e49-46c0-a0e2-efc9f3f2c0e9" config-ref="VM_ConfigSF" queueName="SALESFORCE" timeout="50000000"/>
+		<json-logger:logger doc:name="Logger" doc:id="4041977f-45a2-4d92-a935-c19843285a5f" config-ref="JSON_Logger_Config" message="start"/>
+		<my-train-customer-sapi:get-sfdcs doc:name="Get sfdcs" doc:id="e3829c94-900c-4cbb-95ec-317e72f36fe7" config-ref="My_Train_Customer_SAPI_Config"/>
+		<json-logger:logger doc:name="Logger" doc:id="1a9dd50c-d614-42cc-9cb6-c79beb906b0c" config-ref="JSON_Logger_Config" message="end"/>
+	</flow>
+</mule>
