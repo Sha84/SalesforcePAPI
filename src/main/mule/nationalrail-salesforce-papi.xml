@@ -12,7 +12,8 @@ http://www.mulesoft.org/schema/mule/my-train-customer-sapi http://www.mulesoft.o
 		</vm:queues>
 	</vm:config>
 	<json-logger:config name="JSON_Logger_Config" doc:name="JSON Logger Config" doc:id="e77792aa-0525-4b4a-ab22-c6a6c22498ea" applicationName="nationalrail-salesforce-papi" applicationVersion="1.0" environment="dev" />
-	<my-train-customer-sapi:config name="My_Train_Customer_SAPI_Config" doc:name="My-Train-Customer-SAPI Config" doc:id="ec8ac8c0-1cac-4a8a-b813-5d9694dfff9d" property_host="localhost" property_port="8090" property_protocol="HTTP" property_basePath="/api/" property_responseTimeout="1000000" />
+	<my-train-customer-sapi:config name="My_Train_Customer_SAPI_Config" doc:name="My-Train-Customer-SAPI Config" doc:id="ec8ac8c0-1cac-4a8a-b813-5d9694dfff9d" property_host="${train.host}" property_port="${train.port}" property_protocol="${train.protocol}" property_basePath="/api/" property_responseTimeout="1000000" />
+	<configuration-properties doc:name="Configuration properties" doc:id="4a614580-ac59-4c6e-a291-28705e103ddd" file="config.yaml" />
 	<flow name="nationalrail-salesforce-papiFlow" doc:id="723fce19-c444-4418-b29b-640a973001e8">
 		<scheduler doc:name="Scheduler" doc:id="93234789-3fcb-4d33-b8ff-43491cfd0715" >
 			<scheduling-strategy >
