@@ -16,7 +16,7 @@ http://www.mulesoft.org/schema/mule/my-train-customer-sapi http://www.mulesoft.o
 	<flow name="nationalrail-salesforce-papiFlow" doc:id="723fce19-c444-4418-b29b-640a973001e8">
 		<scheduler doc:name="Scheduler" doc:id="93234789-3fcb-4d33-b8ff-43491cfd0715" >
 			<scheduling-strategy >
-				<fixed-frequency frequency="30" timeUnit="MINUTES"/>
+				<fixed-frequency frequency="1" timeUnit="DAYS"/>
 			</scheduling-strategy>
 		</scheduler>
 		<vm:publish queueName="SALESFORCE" doc:name="Publish" doc:id="2408e139-a471-47d2-9f64-51b51b44d84f" config-ref="VM_ConfigSF" timeout="50000000"/>
